@@ -1,5 +1,5 @@
 #importing
-import mysql.connector
+import mysql.connector, random
 import tkinter as tk
 from tkinter import messagebox
 from tkinter.ttk import *
@@ -19,8 +19,8 @@ def GetToDb(your_host, your_user, your_password, db, query):
         mycursorTo = dbTo.cursor()
         mycursorTo.execute(query)
         dbTo.commit()
-    except:
-        print("launch db")
+    except Exception as e:
+        print(e)
 
 
 
@@ -69,12 +69,41 @@ PasswordText.place(x = 85, y = 105)
 labeltext = tk.StringVar()
 labeltext.set("Please Log in:")
 
-PleaseLogInText=tk.Label(window, textvariable=labeltext, font=("Times New Roman", 20))
+PleaseLogInText=tk.Label(window, textvariable=labeltext, font=("Arial", 20))
 PleaseLogInText.place(y = 30, x = 140)
+
+def hit():
+    messagebox.showinfo("Game result", "You hit, Congratulations. +1 points")
+    GetToDb('localhost', 'root', '', 'sapper', "Update account, points set points.points=points.points +1 where points.id=account.id and account.login='{0}' ".format(l.get()))
+    windowGame.destroy()
+
+
+def miss():
+    messagebox.showinfo("Game result","You missed")
+    windowGame.destroy()
+
 
 
 def startGame():
-    print("gra sie zaczela")
+    global windowGame
+    windowGame=tk.Toplevel()
+    windowGame.focus_set()
+    windowGame.grab_set()
+    windowGame.geometry('600x500')
+    global przyciski
+    przyciski=[]
+    dobry=random.randint(0,18)
+    for i in range(19):
+        if i == 1:
+            przyciski.append(tk.Button(windowGame, text='Press me', command = hit))
+        else:
+            przyciski.append(tk.Button(windowGame, text='Press me', command = miss))
+    for i in przyciski:
+        i.pack(fill='both')
+
+
+
+
 
 
 def changetologged():
@@ -97,7 +126,6 @@ def showScore():
 
     if x_logged:
         score_var = (GetFromDb('localhost', 'root', '', 'sapper', "SELECT points from points, account where account.login='{0}' and points.id=account.id".format(l.get())))
-        print(score_var)
         score_text.set("Your score is: "+str((score_var[0])[0]))
     else:
         score_text.set("you're not logged")
@@ -138,7 +166,7 @@ def register():
 
 
 
-        PleaseRegisterInText = tk.Label(windowRegister, text='Register', font=("Times New Roman", 22))
+        PleaseRegisterInText = tk.Label(windowRegister, text='Register', font=("Arial", 22))
         PleaseRegisterInText.place(x=80, y=20)
 
 
