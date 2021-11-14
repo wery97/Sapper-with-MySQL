@@ -94,7 +94,7 @@ def startGame():
     przyciski=[]
     dobry=random.randint(0,18)
     for i in range(19):
-        if i == 1:
+        if i == dobry:
             przyciski.append(tk.Button(windowGame, text='Press me', command = hit))
         else:
             przyciski.append(tk.Button(windowGame, text='Press me', command = miss))
