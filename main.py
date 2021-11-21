@@ -3,6 +3,7 @@ import mysql.connector, random
 import tkinter as tk
 from tkinter import messagebox
 from tkinter.ttk import *
+#from tkinter import ttk
 
 def GetFromDb(your_host, your_user, your_password, db, query):
     try:
@@ -12,6 +13,7 @@ def GetFromDb(your_host, your_user, your_password, db, query):
     except:
         print("launch db")
     return mycursorFrom.fetchall()
+
 
 def GetToDb(your_host, your_user, your_password, db, query):
     try:
@@ -45,9 +47,9 @@ def registerInDB():
             print("jakis blad")
 
 
-counter=0
+counter = 0
 
-x_logged=False
+x_logged = False
 
 label = tk.Label( window, text = "Select position without the bomb" )
 label.pack( side = tk.BOTTOM )
@@ -89,17 +91,33 @@ def startGame():
     windowGame=tk.Toplevel()
     windowGame.focus_set()
     windowGame.grab_set()
-    windowGame.geometry('600x500')
+    windowGame.geometry('600x600')
+    windowGame.resizable(0, 0)
+
+    windowGame.columnconfigure(0, weight=6)
+    windowGame.columnconfigure(1, weight=6)
+
+
     global przyciski
     przyciski=[]
-    dobry=random.randint(0,18)
-    for i in range(19):
-        if i == dobry:
-            przyciski.append(tk.Button(windowGame, text='Press me', command = hit))
+    dobry=[]
+    for w in range(5):
+        dobry.append(random.randint(0,35))
+    random.randint(0,35)
+    for i in range(36):
+        if i in dobry:
+            przyciski.append(tk.Button(windowGame, text='Press me', command = hit, width=13, height= 6))
         else:
-            przyciski.append(tk.Button(windowGame, text='Press me', command = miss))
-    for i in przyciski:
-        i.pack(fill='both')
+            przyciski.append(tk.Button(windowGame, text='Press me', command = miss, width=13, height= 6))
+
+    for i in range(6):
+        print(i)
+        for j in range(6):
+            przyciski[i*6+j].grid(column = i, row = j, sticky=tk.W)
+
+
+    #for i in przyciski:
+       # i.pack(fill='both')
 
 
 
